@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\HTTP\\": "src/"
+            "MVQN\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MVQN\\HTTP\\": "tests/"
+            "MVQN\\": "tests/"
         }
     }
 }

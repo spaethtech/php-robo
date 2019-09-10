@@ -1,23 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace UCRM\Robo\Tasks;
+namespace MVQN\Robo\Task\Sftp;
 
 use Robo\Contract\TaskInterface;
 use Robo\Result;
 use Robo\Task\BaseTask;
-use UCRM\SFTP\SftpClient;
-use UCRM\SFTP\Exceptions\AuthenticationException;
-use UCRM\SFTP\Exceptions\InitializationException;
-use UCRM\SFTP\Exceptions\LocalStreamException;
-use UCRM\SFTP\Exceptions\MissingExtensionException;
-use UCRM\SFTP\Exceptions\RemoteConnectionException;
-use UCRM\SFTP\Exceptions\RemoteStreamException;
+use MVQN\SFTP\SftpClient;
+use MVQN\SFTP\Exceptions\AuthenticationException;
+use MVQN\SFTP\Exceptions\InitializationException;
+use MVQN\SFTP\Exceptions\LocalStreamException;
+use MVQN\SFTP\Exceptions\MissingExtensionException;
+use MVQN\SFTP\Exceptions\RemoteConnectionException;
+use MVQN\SFTP\Exceptions\RemoteStreamException;
 
 /**
- * Class SftpTasks
+ * Class Sftp
  */
-class SftpTask extends BaseTask implements TaskInterface
+class Sftp extends BaseTask implements TaskInterface
 {
     private $host;
     private $port;
@@ -44,7 +44,7 @@ class SftpTask extends BaseTask implements TaskInterface
      * @param string $user
      * @param string $pass
      *
-     * @return SftpTask
+     * @return Sftp
      */
     public function login(string $user, string $pass)
     {

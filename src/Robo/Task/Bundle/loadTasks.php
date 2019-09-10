@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Robo\Task\Sftp;
+namespace UCMR\Robo\Task\Bundle;
 
 use Robo\Collection\CollectionBuilder;
 
@@ -13,11 +13,13 @@ trait loadTasks
      *
      * @return CollectionBuilder
      */
+    /*
     protected function taskSftp(string $host, int $port)
     {
         // Always construct your tasks with the task builder.
-        return $this->task(Sftp::class, $host, $port);
+        return $this->task(SftpTask::class, $host, $port);
     }
+    */
 
     // ...
 }
