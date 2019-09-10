@@ -11,7 +11,7 @@ trait loadTasks
      * @param string $host  The hostname of the remote server.
      * @param int $port     The port to use when connecting to the remote server, defaults to 22.
      *
-     * @return CollectionBuilder
+     * @return Sftp
      */
     protected function taskSftp(string $host, int $port)
     {
