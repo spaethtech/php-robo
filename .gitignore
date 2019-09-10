@@ -1,0 +1,12 @@
+# ======================================================================================================================
+# EDITORS
+# ----------------------------------------------------------------------------------------------------------------------
+# Exclude any IDE/Editor files and/or folders that you do not want included in your git repository.
+#
+# NOTES:
+# - I use JetBrain's PhpStorm, so I have included my preferred settings below.
+# - Feel free to include any of your own here!
+# ======================================================================================================================
+.idea/
+
+vendor/
