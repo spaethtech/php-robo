@@ -15,7 +15,24 @@ use MVQN\SFTP\Exceptions\RemoteConnectionException;
 use MVQN\SFTP\Exceptions\RemoteStreamException;
 
 /**
- * Class Sftp
+ * Exposes some SFTP functionality.
+ *
+ * ``` php
+ * <?php
+ * $this->taskSftp(<host>, <port>)
+ *     ->login(<user>, <pass>)                  // Authenticates with the remote server.
+ *     ->download(<remote>, <local>)            // Downloads the "remote" path to the "local" path.
+ *     ->run();
+ * ?>
+ *
+ * $this->taskSftp(<host>, <port>)
+ *     ->login(<user>, <pass>)                  // Authenticates with the remote server.
+ *     ->upload(<local>, <remote>)              // Downloads the "remote" path to the "local" path.
+ *     ->run();
+ * ?>
+ * ```
+ *
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 class Sftp extends BaseTask implements TaskInterface
 {

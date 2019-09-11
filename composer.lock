@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "mvqn/sftp",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mvqn/sftp.git",
-                "reference": "742166c46ddfdf488ce4bf75cc0deabf05f1d935"
+                "reference": "392a8b58bde5627eea519196f54cbf9f877a529d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mvqn/sftp/zipball/742166c46ddfdf488ce4bf75cc0deabf05f1d935",
-                "reference": "742166c46ddfdf488ce4bf75cc0deabf05f1d935",
+                "url": "https://api.github.com/repos/mvqn/sftp/zipball/392a8b58bde5627eea519196f54cbf9f877a529d",
+                "reference": "392a8b58bde5627eea519196f54cbf9f877a529d",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                 }
             ],
             "description": "A Simple File Transfer Protocol (SFTP) wrapper.",
-            "time": "2019-09-10T19:31:36+00:00"
+            "time": "2019-09-11T19:44:06+00:00"
         }
     ],
     "packages-dev": [
