@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace UCMR\Robo\Task\Bundle;
+namespace UCMR\Robo\Task\Environment;
 
 use Robo\Collection\CollectionBuilder;
 
-trait loadTasks
+trait Tasks
 {
     /**
      * @param string $host  The hostname of the remote server.

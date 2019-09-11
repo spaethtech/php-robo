@@ -18,11 +18,11 @@ trait Tasks
      *
      * @return Put
      */
-    protected function taskSftpGet(string $host, int $port)
+    protected function taskSftpGet(string $host = "", int $port = 22, string $user = "", string $pass = "")
     {
         // Always construct your tasks with the task builder.
         /** @noinspection PhpUndefinedMethodInspection */
-        return $this->task(Get::class, $host, $port);
+        return $this->task(Get::class, $host, $port, $user, $pass);
     }
 
     /**
@@ -31,11 +31,11 @@ trait Tasks
      *
      * @return Put
      */
-    protected function taskSftpPut(string $host, int $port)
+    protected function taskSftpPut(string $host = "", int $port = 22, string $user = "", string $pass = "")
     {
         // Always construct your tasks with the task builder.
         /** @noinspection PhpUndefinedMethodInspection */
-        return $this->task(Put::class, $host, $port);
+        return $this->task(Put::class, $host, $port, $user, $pass);
     }
 
     // ...

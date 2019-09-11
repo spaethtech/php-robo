@@ -36,12 +36,10 @@ use MVQN\SFTP\Exceptions\RemoteStreamException;
  */
 class Put extends Base implements TaskInterface
 {
-    private $mappings = [];
-
 
     public function map(string $local, string $remote)
     {
-        $this->mappings[$this->localBase.$local] = $this->remoteBase.$remote;
+        $this->localMaps[$this->localBase.$local] = $this->remoteBase.$remote;
         return $this;
     }
 
@@ -60,7 +58,7 @@ class Put extends Base implements TaskInterface
         $client = new SftpClient($this->host, $this->port);
         $client->login($this->user, $this->pass);
 
-        foreach($this->mappings as $remote => $local)
+        foreach($this->localMaps as $local => $remote)
             $client->upload($local, $remote);
 
         $this->printTaskSuccess("DONE!");

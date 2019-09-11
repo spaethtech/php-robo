@@ -10,3 +10,6 @@
 .idea/
 
 vendor/
+
+.env
+sftp.config.json
