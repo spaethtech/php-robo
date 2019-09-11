@@ -41,6 +41,9 @@ abstract class Base extends BaseTask
     protected $user;
     protected $pass;
 
+    protected $remoteBase = "";
+    protected $localBase = "";
+
     /**
      * SftpTasks constructor.
      *
@@ -63,6 +66,19 @@ abstract class Base extends BaseTask
     {
         $this->user = $user;
         $this->pass = $pass;
+        return $this;
+    }
+
+
+    public function remoteBase(string $remote)
+    {
+        $this->remoteBase = $remote;
+        return $this;
+    }
+
+    public function localBase(string $local)
+    {
+        $this->localBase = $local;
         return $this;
     }
 
