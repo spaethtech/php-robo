@@ -44,6 +44,17 @@ class Get extends Base implements TaskInterface
     }
 
     /**
+     * @param array $maps
+     * @return $this
+     */
+    public function maps(array $maps)
+    {
+        $this->remoteMaps($maps);
+        return $this;
+    }
+
+
+    /**
      * @return Result|void
      * @throws AuthenticationException
      * @throws InitializationException
@@ -59,9 +70,12 @@ class Get extends Base implements TaskInterface
         $client->login($this->user, $this->pass);
 
         foreach($this->remoteMaps as $remote => $local)
+        {
             $client->download($remote, $local);
+            $this->printTaskSuccess("> Downloaded: $remote => $local");
+        }
 
-        $this->printTaskSuccess("DONE!");
+        $this->printTaskSuccess("...DONE!");
 
 
     }

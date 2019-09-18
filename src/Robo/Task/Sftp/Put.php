@@ -59,9 +59,12 @@ class Put extends Base implements TaskInterface
         $client->login($this->user, $this->pass);
 
         foreach($this->localMaps as $local => $remote)
+        {
             $client->upload($local, $remote);
+            $this->printTaskSuccess("> Uploaded: $local => $remote");
+        }
 
-        $this->printTaskSuccess("DONE!");
+        $this->printTaskSuccess("...DONE!");
     }
 
 }
