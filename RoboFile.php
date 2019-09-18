@@ -73,7 +73,48 @@ class RoboFile extends Tasks
 
     #region SFTP
 
+    private const DEFAULT_SFTP_JSON_PATH    = __DIR__.DIRECTORY_SEPARATOR."sftp.config.json";
+    private const DEFAULT_SFTP_JSON_OPTIONS = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+
     private const REMOTE_PLUGIN_PATH = "/home/unms/data/ucrm/ucrm/data/plugins";
+
+    private $sftp = [];
+
+
+    private function getRelativePath($from, $to)
+    {
+        // some compatibility fixes for Windows paths
+        $from = is_dir($from) ? rtrim($from, '\/') . '/' : $from;
+        $to   = is_dir($to)   ? rtrim($to, '\/') . '/'   : $to;
+        $from = str_replace('\\', '/', $from);
+        $to   = str_replace('\\', '/', $to);
+
+        $from     = explode('/', $from);
+        $to       = explode('/', $to);
+        $relPath  = $to;
+
+        foreach($from as $depth => $dir) {
+            // find first non-matching dir
+            if($dir === $to[$depth]) {
+                // ignore this directory
+                array_shift($relPath);
+            } else {
+                // get number of remaining dirs to $from
+                $remaining = count($from) - $depth;
+                if($remaining > 1) {
+                    // add traversals up to first matching dir
+                    $padLength = (count($relPath) + $remaining - 1) * -1;
+                    $relPath = array_pad($relPath, $padLength, '..');
+                    break;
+                } else {
+                    $relPath[0] = './' . $relPath[0];
+                }
+            }
+        }
+        return implode('/', $relPath);
+    }
+
+
 
     /**
      * Prompts the developer for SFTP Configuration and saves or updates the results in an .env file.
@@ -84,19 +125,24 @@ class RoboFile extends Tasks
      * - The values will be stored in plain text in an .env file, so it is IMPORTANT that the file not be included in
      *   the Plugin package or repository commits.
      *
-     * @param string|null $envPath
+     * @param string $path
      */
-    public function sftpConfigure(string $envPath = null): void
+    public function sftpConfigure(string $path = self::DEFAULT_SFTP_JSON_PATH): void
     {
-        $envPath = $envPath ?? __DIR__.DIRECTORY_SEPARATOR.".env";
-        $envFile = file_exists($envPath) ? file_get_contents($envPath) : "";
+        if(file_exists($path))
+            $this->sftp = json_decode(file_get_contents($path), true);
 
-        $this->setEnv("SFTP_HOST", "SFTP Host", $envFile);
-        $this->setEnv("SFTP_PORT", "SFTP Port", $envFile);
-        $this->setEnv("SFTP_USER", "SFTP User", $envFile);
-        $this->setEnv("SFTP_PASS", "SFTP Pass", $envFile, true);
+        $this->sftp["host"] = $this->askDefault("SFTP Host", isset($this->sftp["host"]) ? $this->sftp["host"] : "");
+        $this->sftp["port"] = $this->askDefault("SFTP Port", isset($this->sftp["port"]) ? $this->sftp["port"] : 22);
+        $this->sftp["user"] = $this->askDefault("SFTP User", isset($this->sftp["user"]) ? $this->sftp["user"] : "");
+        $this->sftp["pass"] = $this->askDefault("SFTP Pass", isset($this->sftp["pass"]) ? $this->sftp["pass"] : "");
 
-        file_put_contents($envPath, $envFile, LOCK_EX);
+        file_put_contents($path, json_encode($this->sftp, self::DEFAULT_SFTP_JSON_OPTIONS));
+
+        $relative = str_replace("./", "", $this->getRelativePath(__DIR__, $path));
+
+        if(!file_exists(".gitignore") || strpos(file_get_contents(".gitignore"), $path) === false)
+            file_put_contents(".gitignore", "$relative\n", FILE_APPEND | LOCK_EX );
     }
 
     /**
