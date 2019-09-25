@@ -36,256 +36,252 @@ use MVQN\SFTP\Exceptions\RemoteStreamException;
  */
 abstract class Base extends BaseTask
 {
-    protected const DEFAULT_CONFIG_FILE = "sftp.config.json";
-    protected const DEFAULT_JSON_OPTIONS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
-
-    protected $host;
-    protected $port;
-    protected $user;
-    protected $pass;
-
-    protected $remoteBase = "";
-    protected $localBase = "";
-
-    protected $remoteMaps = [];
-    protected $localMaps = [];
-
+    #region CONSTANTS
 
     /**
-     * SftpTasks constructor.
-     *
-     * @param string    $host   The host to use when connecting over SFTP.
-     * @param int       $port   The port to use when connecting over SFTP.
-     * @param string    $user   The user to use when connecting over SFTP.
-     * @param string    $pass   The pass to use when connecting over SFTP.
+     * The default config file.
      */
-    /*
-    public function __construct(string $host = "", int $port = 22, string $user = "", string $pass = "")
-    {
-        $this->host = $host;
-        $this->port = $port;
-        $this->user = $user;
-        $this->pass = $pass;
-    }
-    */
+    protected const DEFAULT_CONFIG_FILE = "sftp.config.json";
+
+    /**
+     * The default JSON encoding options.
+     */
+    protected const DEFAULT_JSON_OPTIONS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
+
+    #endregion
+
+    #region OPTIONS
+
+    /**
+     * @var array The current options, initialized with defaults.
+     */
+    protected $options = [
+        "host"          => "",
+        "port"          => 22,
+        "user"          => "",
+        "pass"          => "",
+
+        "base"  => [
+            "remote"    => "",
+            "local"     => "",
+        ],
+
+        "maps"  => [
+            "remote"    => [],
+            "local"     => [],
+        ]
+    ];
+
+    #endregion
+
+    #region CONSTRUCTOR / DESTRUCTOR
 
     /**
      * Base constructor.
-     * @param array $data
+     *
+     * @param array $options
      */
-    public function __construct(array $data = [])
+    public function __construct(array $options = [])
     {
-        $this->fromConfiguration($data);
+        $this->setOptions($options);
     }
 
-    #region Configuration: Manual
+    #endregion
+
+    #region SETTERS
 
     /**
-     * @param string $host
-     * @return $this
+     * Sets any desired options, overriding existing or default options.
+     *
+     * @param array $options The array of options.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
+     */
+    public function setOptions(array $options): self
+    {
+        $this->options = array_merge($this->options, $options);
+        return $this;
+    }
+
+    /**
+     * Sets the 'host' to use for this SFTP connection.
+     *
+     * @param string $host The 'host' to use for this SFTP connection.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
     public function setHost(string $host): self
     {
-        $this->host = $host;
+        $this->options["host"] = $host;
         return $this;
     }
 
     /**
-     * @param int $port
-     * @return $this
+     * Sets the 'port' to use for this SFTP connection.
+     *
+     * @param int $port The 'port' to use for this SFTP connection.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
     public function setPort(int $port): self
     {
-        $this->port = $port;
+        $this->options["port"] = $port;
         return $this;
     }
 
     /**
-     * @param string $user
-     * @return $this
+     * Sets the 'user' to use for this SFTP connection.
+     *
+     * @param string $user The 'user' to use for this SFTP connection.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
     public function setUser(string $user): self
     {
-        $this->user = $user;
+        $this->options["user"] = $user;
         return $this;
     }
 
     /**
-     * @param string $pass
-     * @return $this
+     * Sets the 'pass' to use for this SFTP connection.
+     *
+     * @param string $pass The 'pass' to use for this SFTP connection.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
     public function setPass(string $pass): self
     {
-        $this->pass = $pass;
+        $this->options["pass"] = $pass;
         return $this;
     }
 
     /**
-     * @param string $remote
-     * @return $this
+     * Sets an optional 'remote' base path to prefix relative paths.
+     *
+     * @param string $remote A 'remote' base path to prefix relative paths.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
-    public function remoteBase(string $remote)
+    public function setRemoteBase(string $remote)
     {
-        $this->remoteBase = $remote;
+        $this->options["base"]["remote"] = $remote;
         return $this;
     }
 
     /**
-     * @param string $local
-     * @return $this
+     * Sets an optional 'local' base path to prefix relative paths.
+     *
+     * @param string $local A 'local' base path to prefix relative paths.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
-    public function localBase(string $local)
+    public function setLocalBase(string $local)
     {
-        $this->localBase = $local;
+        $this->options["base"]["local"] = $local;
         return $this;
     }
 
-    protected function remoteMaps(array $remoteMaps)
+    /**
+     * Sets any 'remote to local' path mappings.
+     *
+     * @param array $remoteMaps An array of 'remote to local' path mappings.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
+     *
+     * @deprecated Use the newer map()/maps() methods in the inheriting classes.
+     */
+    protected function setRemoteMaps(array $remoteMaps)
     {
-        $this->remoteMaps = $remoteMaps;
+        $this->options["maps"]["remote"] = $remoteMaps;
         return $this;
     }
 
-    protected function localMaps(array $localMaps)
+    /**
+     * Sets any 'local to remote' path mappings.
+     *
+     * @param array $localMaps An array of 'local to remote' path mappings.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
+     *
+     * @deprecated Use the newer map()/maps() methods in the inheriting classes.
+     */
+    protected function setLocalMaps(array $localMaps)
     {
-        $this->localMaps = $localMaps;
+        $this->options["maps"]["local"] = $localMaps;
         return $this;
     }
 
     #endregion
 
-    #region Configuration: Persistent
-
-    /*
-    public function setConfiguration(array $configuration): self
-    {
-        foreach($configuration as $key => $value)
-            if(property_exists($this, $key))
-                $this->$key = $value;
-
-        return $this;
-    }
-    */
-
-
-
-    protected function fromConfiguration(array $data)
-    {
-        $this->host         = $data["host"] ?? "";
-        $this->port         = $data["port"] ?? 22;
-        $this->user         = $data["user"] ?? "";
-        $this->pass         = $data["pass"] ?? "";
-
-        $this->remoteBase   = $data["base"]["remote"] ?? "";
-        $this->localBase    = $data["base"]["local"] ?? "";
-
-        $this->remoteMaps   = $data["maps"]["remote"] ?? "";
-        $this->localMaps    = $data["maps"]["local"] ?? "";
-    }
-
+    #region CONFIGURATION
 
     /**
-     * @param callable $configurator
-     * @param array $arguments
-     * @return $this
-     */
-    public function funcConfiguration(callable $configurator, ...$arguments): self
-    {
-        $current = json_decode((string)$this, true);
-        $configuration = $configurator($current, ...$arguments);
-
-        $this->fromConfiguration($configuration);
-
-        return $this;
-        //return new $this($configuration);
-    }
-
-
-    public function __toString()
-    {
-        $data = [
-            "host"          => $this->host,
-            "port"          => $this->port,
-            "user"          => $this->user,
-            "pass"          => $this->pass,
-
-            "base"  => [
-                "remote"    => $this->remoteBase,
-                "local"     => $this->localBase,
-            ],
-
-            "maps"  => [
-                "remote"    => $this->remoteMaps,
-                "local"     => $this->localMaps,
-            ]
-        ];
-
-        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    }
-
-    /**
-     * @param string $path
-     * @return $this
+     * Loads options from the specified configuration file.
+     *
+     * @param string $path The file path from which SFTP options should be loaded, defaults to "sftp.config.json".
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
+     *
      * @throws Exceptions\ConfigurationMissingException
      * @throws Exceptions\ConfigurationParsingException
      */
     public function loadConfiguration(string $path = self::DEFAULT_CONFIG_FILE): self
     {
-        if(!($real = realpath($path)))
-            throw new Exceptions\ConfigurationMissingException(
-                get_class($this)."::loadConfiguration() could not locate the configuration file '$path'!"
-            );
+        //if(!($real = realpath($path)))
+            //throw new Exceptions\ConfigurationMissingException(
+            //    get_class($this)."::loadConfiguration() could not locate the configuration file '$path'!"
+            //);
 
-        $data = json_decode(file_get_contents($real), true);
+        if($real = realpath($path)) {
+            $configuration = json_decode(file_get_contents($real), true);
 
-        if(json_last_error() !== JSON_ERROR_NONE)
-            throw new Exceptions\ConfigurationParsingException(
-                get_class($this)."::loadConfiguration() encountered the following error(s) when parsing '$path': ".
-                json_last_error_msg()
-            );
+            if (json_last_error() !== JSON_ERROR_NONE)
+                throw new Exceptions\ConfigurationParsingException(
+                    get_class($this) . "::loadConfiguration() encountered the following error(s) when parsing '$path': " .
+                    json_last_error_msg()
+                );
 
-        $this->fromConfiguration($data);
+            $this->setOptions($configuration);
 
-        /*
-        $this->host         = $data["host"];
-        $this->port         = $data["port"];
-        $this->user         = $data["user"];
-        $this->pass         = $data["pass"];
-
-        $this->remoteBase   = $data["base"]["remote"];
-        $this->localBase    = $data["base"]["local"];
-
-        $this->remoteMaps   = $data["maps"]["remote"];
-        $this->localMaps    = $data["maps"]["local"];
-        */
-
-        $this->printTaskInfo("Configuration loaded successfully!");
+            $this->printTaskInfo("Configuration loaded successfully!");
+        }
 
         return $this;
     }
 
     /**
-     * @param string $path
-     * @return $this
+     * Loads options to the specified configuration file.
+     *
+     * @param string $path The file path to which SFTP options should be saved, defaults to "sftp.config.json".
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
      */
     public function saveConfiguration(string $path = self::DEFAULT_CONFIG_FILE): self
     {
-        $data = $this->toConfiguration();
-
-        file_put_contents($path, json_encode($data, self::DEFAULT_JSON_OPTIONS));
+        file_put_contents($path, json_encode($this->options, self::DEFAULT_JSON_OPTIONS));
 
         $this->printTaskInfo("Configuration saved successfully!");
 
         return $this;
     }
 
+    /**
+     * A closure-based configuration proxy, used to verify/modify values prior to setting them on this SFTP object.
+     *
+     * @param callable $configurator The closure to call for verification/modification of the configuration options.
+     * @param array $arguments An optional set of arguments to pass to the closure.
+     *
+     * @return $this Returns this SFTP object to allow for method chaining.
+     */
+    public function funcConfiguration(callable $configurator, ...$arguments): self
+    {
+        $configuration = $configurator($this->options, ...$arguments);
+
+        $this->setOptions($configuration);
+
+        return $this;
+    }
 
     #endregion
-
-
-
-
-
-
 
 }

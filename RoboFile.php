@@ -4,6 +4,7 @@ require_once __DIR__."/vendor/autoload.php";
 
 use MVQN\Robo\Task\Sftp\Exceptions\ConfigurationMissingException;
 use MVQN\Robo\Task\Sftp\Exceptions\ConfigurationParsingException;
+use MVQN\Robo\Task\Sftp\Exceptions\OptionMissingException;
 use MVQN\SFTP\Exceptions\AuthenticationException;
 use MVQN\SFTP\Exceptions\InitializationException;
 use MVQN\SFTP\Exceptions\LocalStreamException;
@@ -92,53 +93,26 @@ class RoboFile extends Tasks
      * @param string $local
      *
      * @throws AuthenticationException
+     * @throws ConfigurationMissingException
+     * @throws ConfigurationParsingException
      * @throws InitializationException
      * @throws LocalStreamException
      * @throws MissingExtensionException
      * @throws RemoteConnectionException
      * @throws RemoteStreamException
-     * @throws ConfigurationMissingException
-     * @throws ConfigurationParsingException
+     * @throws OptionMissingException
      */
     public function sftpGet(string $remote, string $local)
     {
-        $plugin = "ucrm-plugin-template";
+        $basename = basename(__DIR__);
+        $plugin = $basename !== "robo-tasks" ? $basename : "ucrm-plugin-template";
 
         $remote = strpos($remote, "/") === 0 ? $remote : self::REMOTE_PLUGIN_PATH."/$plugin/$remote";
         $local = strpos($remote, ":\\") !== false ? $local : __DIR__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."$local";
 
-        $this->taskSftpGet(/* $host, $port, $user, $pass */)
-            /*
-            ->setHost($host)
-            ->setPort($port)
-            ->setUser($user)
-            ->setPass($pass)
-            */
-
-            /*
-            ->map($remote, $local)
-            ->maps([ $remote => $local ])
-            */
-
-
+        $this->taskSftpGet()
 
             ->loadConfiguration()
-            /*
-            ->saveConfiguration()
-            */
-
-            /*
-            ->funcConfiguration([ $this, "askSftpConfiguration" ], __DIR__, "sftp.config.json")
-            */
-
-            /*
-            ->funcConfiguration(
-                function()
-                {
-                    return $this->askSftpConfiguration(__DIR__, "sftp.config.json");
-                }
-            )
-            */
 
             ->funcConfiguration(
                 function(array $current) use ($remote, $local)
@@ -147,10 +121,11 @@ class RoboFile extends Tasks
                         $current["user"] === "" || $current["pass"] === "")
                         $current = $this->askSftpConfiguration(__DIR__, "sftp.config.json");
 
-                    $current["maps"]["remote"] = [ $remote => $local ];
                     return $current;
                 }
             )
+
+            ->map($remote, $local)
 
             ->run();
     }
@@ -160,27 +135,40 @@ class RoboFile extends Tasks
      * @param string $remote
      *
      * @throws AuthenticationException
+     * @throws ConfigurationMissingException
+     * @throws ConfigurationParsingException
      * @throws InitializationException
      * @throws LocalStreamException
      * @throws MissingExtensionException
+     * @throws OptionMissingException
      * @throws RemoteConnectionException
      * @throws RemoteStreamException
      */
     public function sftpPut(string $local, string $remote)
     {
-        $plugin = $this->getPluginName();
+        $basename = basename(__DIR__);
+        $plugin = $basename !== "robo-tasks" ? $basename : "ucrm-plugin-template";
 
-        $local = strpos($remote, ":\\") !== false ? $local : __DIR__."/src/$local";
         $remote = strpos($remote, "/") === 0 ? $remote : self::REMOTE_PLUGIN_PATH."/$plugin/$remote";
+        $local = strpos($remote, ":\\") !== false ? $local : __DIR__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."$local";
 
-        $host = $this->getEnv("SFTP_HOST");
-        $port = $this->getEnv("SFTP_PORT");
-        $user = $this->getEnv("SFTP_USER");
-        $pass = $this->getEnv("SFTP_PASS");
+        $this->taskSftpPut()
 
-        $this->taskSftpPut($host, (int)$port)
-            ->login($user, $pass)
-            ->upload($local, $remote)
+            ->loadConfiguration()
+
+            ->funcConfiguration(
+                function(array $current) use ($remote, $local)
+                {
+                    if ($current["host"] === "" || $current["port"] === "" ||
+                        $current["user"] === "" || $current["pass"] === "")
+                        $current = $this->askSftpConfiguration(__DIR__, "sftp.config.json");
+
+                    return $current;
+                }
+            )
+
+            ->map($local, $remote)
+
             ->run();
     }
 

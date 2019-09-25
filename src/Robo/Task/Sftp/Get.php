@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace MVQN\Robo\Task\Sftp;
 
+use MVQN\Common\Paths;
+use MVQN\Robo\Task\Sftp\Exceptions\OptionMissingException;
 use Robo\Contract\TaskInterface;
 use Robo\Result;
 
@@ -19,27 +21,43 @@ use MVQN\SFTP\Exceptions\RemoteStreamException;
  *
  * ``` php
  * <?php
- * $this->taskSftp(<host>, <port>)
- *     ->login(<user>, <pass>)                  // Authenticates with the remote server.
- *     ->download(<remote>, <local>)            // Downloads the "remote" path to the "local" path.
- *     ->run();
- * ?>
+ * $this->taskSftpGet([ <options> ])            // Pass any desired configuration options here
  *
- * $this->taskSftp(<host>, <port>)
- *     ->login(<user>, <pass>)                  // Authenticates with the remote server.
- *     ->upload(<local>, <remote>)              // Downloads the "remote" path to the "local" path.
- *     ->run();
+ *     ->setOptions([ <options> ])              // OR include multiple options using the setter
+ *
+ *                                              // OR include them using the individual setters:
+ *     ->setHost(<host>)                        // The SFTP server's hostname
+ *     ->setPort(<port>)                        // The SFTP server's port, defaults to 22
+ *     ->setUser(<user>)                        // The SFTP server's username
+ *     ->setPass(<pass>)                        // The SFTP server's password
+ *     ->setRemoteBase(path)                    // An optional base path for which to prefix remote relative paths
+ *     ->setLocalBase(path)                     // An optional base path for which to prefix local relative paths
+ *
+ *     ->loadConfiguration(<path>)              // OR load them from a configuration file (i.e. "sftp.config.json")
+ *     ->funcConfiguration(callable, <args>)    // THEN verify/modify the configuration options, as needed
+ *     ->saveConfiguration(<path>)              // AND optionally save them to a configuration file
+ *
+ *     ->map(remote, local)                     // AND add remote to local mappings individually,
+ *     ->maps(maps)                             // OR replacing all mappings at once.
+ *
+ *     ->run();                                 // FINALLY execute a GET request for ALL mappings, using the options.
  * ?>
  * ```
  *
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @final
  */
-class Get extends Base implements TaskInterface
+final class Get extends Base implements TaskInterface
 {
 
+    /**
+     * @param string $remote
+     * @param string $local
+     * @return $this
+     */
     public function map(string $remote, string $local)
     {
-        $this->remoteMaps[$this->remoteBase.$remote] = $this->localBase.$local;
+        $this->options["maps"]["remote"][$this->options["base"]["remote"].$remote] = $this->options["base"]["local"].$local;
         return $this;
     }
 
@@ -49,7 +67,7 @@ class Get extends Base implements TaskInterface
      */
     public function maps(array $maps)
     {
-        $this->remoteMaps($maps);
+        $this->options["maps"]["remote"] = $maps;
         return $this;
     }
 
@@ -62,22 +80,43 @@ class Get extends Base implements TaskInterface
      * @throws RemoteConnectionException
      * @throws LocalStreamException
      * @throws RemoteStreamException
+     * @throws OptionMissingException
      */
     public function run()
     {
-        $this->printTaskInfo("Connecting to SFTP...");
-        $client = new SftpClient($this->host, $this->port);
-        $client->login($this->user, $this->pass);
+        if(empty($host = $this->options["host"]))
+            throw new OptionMissingException("The option 'host' must be set before calling ".__CLASS__."::run()!");
+        if(empty($port = $this->options["port"]))
+            throw new OptionMissingException("The option 'port' must be set before calling ".__CLASS__."::run()!");
+        if(empty($user = $this->options["user"]))
+            throw new OptionMissingException("The option 'user' must be set before calling ".__CLASS__."::run()!");
+        if(empty($pass = $this->options["pass"]))
+            throw new OptionMissingException("The option 'pass' must be set before calling ".__CLASS__."::run()!");
 
-        foreach($this->remoteMaps as $remote => $local)
+        $this->printTaskInfo("Connecting to SFTP...");
+
+        $client = new SftpClient($host, $port);
+        $client->login($user, $pass);
+
+        if(empty($this->options["maps"]) || empty($this->options["maps"]["remote"]))
+            throw new OptionMissingException("At least on remote mapping must be set before calling ".__CLASS__."::run()!");
+
+        foreach($this->options["maps"]["remote"] as $remote => $local)
         {
+            //var_dump($this->options["maps"]);
+            //exit();
+
             $client->download($remote, $local);
-            $this->printTaskSuccess("> Downloaded: $remote => $local");
+
+            $remotePath = Paths::canonicalize($remote, "/");
+            $localPath = Paths::canonicalize($local, "\\");
+
+            $this->printTaskSuccess("> DOWNLOAD");
+            $this->printTaskSuccess("  [R] $remotePath");
+            $this->printTaskSuccess("  [L] $localPath");
         }
 
-        $this->printTaskSuccess("...DONE!");
-
-
+        //$this->printTaskSuccess("...DONE!");
     }
 
 }
