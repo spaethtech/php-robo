@@ -13,6 +13,7 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
+        "ext-zip": "*",
         "mvqn/sftp": "^1"
     },
     "require-dev": {

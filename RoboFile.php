@@ -20,7 +20,7 @@ use Robo\Tasks;
  */
 class RoboFile extends Tasks
 {
-    use MVQN\Robo\Task\Sftp\Tasks;
+
 
     #region Environment
 
@@ -76,6 +76,8 @@ class RoboFile extends Tasks
 
     #region SFTP
 
+    use MVQN\Robo\Task\Sftp\Tasks;
+
     private const REMOTE_PLUGIN_PATH = "/home/unms/data/ucrm/ucrm/data/plugins";
 
     /**
@@ -104,11 +106,13 @@ class RoboFile extends Tasks
      */
     public function sftpGet(string $remote, string $local)
     {
+        /*
         $basename = basename(__DIR__);
         $plugin = $basename !== "robo-tasks" ? $basename : "ucrm-plugin-template";
 
         $remote = strpos($remote, "/") === 0 ? $remote : self::REMOTE_PLUGIN_PATH."/$plugin/$remote";
         $local = strpos($remote, ":\\") !== false ? $local : __DIR__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."$local";
+        */
 
         $this->taskSftpGet()
 
@@ -173,6 +177,23 @@ class RoboFile extends Tasks
     }
 
     #endregion
+
+    use MVQN\Robo\Task\Packer\Tasks;
+
+    public function packerBundle(string $folder = "", string $output = "", string $ignore = "")
+    {
+        $folder = $folder ?: __DIR__;
+        $output = $output ?: basename($folder);
+        $ignore = $ignore ?: __DIR__.DIRECTORY_SEPARATOR.".zipignore";
+
+        $this->taskPackerBundle()
+            ->setFolder($folder)
+            ->setOutput($output)
+            ->setIgnore($ignore)
+
+            ->run();
+
+    }
 
 
 }

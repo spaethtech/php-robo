@@ -11,5 +11,5 @@
 
 vendor/
 
-.env
 sftp.config.json
+robo-tasks.zip
