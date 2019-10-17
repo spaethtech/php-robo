@@ -186,12 +186,39 @@ class Bundle extends BaseTask
         return false;
     }
 
+    private $funcBefore;
 
+    /**
+     * @param callable $func
+     * @return $this
+     */
+    public function before(callable $func): self
+    {
+        $this->funcBefore = $func;
+        return $this;
+    }
 
+    private $funcAfter;
+
+    /**
+     * @param callable $func
+     * @return $this
+     */
+    public function after(callable $func): self
+    {
+        $this->funcAfter = $func;
+        return $this;
+    }
 
 
     public function run()
     {
+        if($this->funcBefore)
+        {
+            echo "Executing Before Hook...\n";
+            call_user_func($this->funcBefore);
+        }
+
         $folder = realpath($this->options["folder"] ?: getcwd());
 
         // IF the folder does not exist or is not a directory, THEN die()!
@@ -278,8 +305,11 @@ class Bundle extends BaseTask
         // Return to the previous working directory.
         chdir($old_dir);
 
-
-
+        if($this->funcAfter)
+        {
+            echo "Executing After Hook...\n";
+            call_user_func($this->funcAfter);
+        }
     }
 
 }
