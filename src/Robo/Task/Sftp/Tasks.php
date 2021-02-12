@@ -1,12 +1,12 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Robo\Task\Sftp;
+namespace rspaeth\Robo\Task\Sftp;
 
 /**
  * Trait tasks
  *
- * @package MVQN\Robo\Task\Put
+ * @package rspaeth\Robo\Task\Put
  * @athor Ryan Spaeth <rspaeth@mvqn.net>
  */
 trait Tasks

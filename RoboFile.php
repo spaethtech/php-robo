@@ -2,15 +2,15 @@
 declare(strict_types=1);
 require_once __DIR__."/vendor/autoload.php";
 
-use MVQN\Robo\Task\Sftp\Exceptions\ConfigurationMissingException;
-use MVQN\Robo\Task\Sftp\Exceptions\ConfigurationParsingException;
-use MVQN\Robo\Task\Sftp\Exceptions\OptionMissingException;
-use MVQN\SFTP\Exceptions\AuthenticationException;
-use MVQN\SFTP\Exceptions\InitializationException;
-use MVQN\SFTP\Exceptions\LocalStreamException;
-use MVQN\SFTP\Exceptions\MissingExtensionException;
-use MVQN\SFTP\Exceptions\RemoteConnectionException;
-use MVQN\SFTP\Exceptions\RemoteStreamException;
+use rspaeth\Robo\Task\Sftp\Exceptions\ConfigurationMissingException;
+use rspaeth\Robo\Task\Sftp\Exceptions\ConfigurationParsingException;
+use rspaeth\Robo\Task\Sftp\Exceptions\OptionMissingException;
+use rspaeth\SFTP\Exceptions\AuthenticationException;
+use rspaeth\SFTP\Exceptions\InitializationException;
+use rspaeth\SFTP\Exceptions\LocalStreamException;
+use rspaeth\SFTP\Exceptions\MissingExtensionException;
+use rspaeth\SFTP\Exceptions\RemoteConnectionException;
+use rspaeth\SFTP\Exceptions\RemoteStreamException;
 use Robo\Tasks;
 
 /**
@@ -76,7 +76,7 @@ class RoboFile extends Tasks
 
     #region SFTP
 
-    use MVQN\Robo\Task\Sftp\Tasks;
+    use rspaeth\Robo\Task\Sftp\Tasks;
 
     private const REMOTE_PLUGIN_PATH = "/home/unms/data/ucrm/ucrm/data/plugins";
 
@@ -178,7 +178,7 @@ class RoboFile extends Tasks
 
     #endregion
 
-    use MVQN\Robo\Task\Packer\Tasks;
+    use rspaeth\Robo\Task\Packer\Tasks;
 
     public function packerBundle(string $folder = "", string $output = "", string $ignore = "")
     {
