@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Robo\Task\Packer;
+namespace MVQN\Robo\Task\Packer;
 
 
 trait Tasks

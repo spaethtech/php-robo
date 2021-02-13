@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6393a60df735f04f705df577858ba9a",
+    "content-hash": "d508e0be85fdd950e4769868d9fe0aec",
     "packages": [
         {
-            "name": "rspaeth/sftp",
+            "name": "mvqn/sftp",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/mvqn/sftp.git",
+                "reference": "dedcc9f89572393035bdca3ba334b418210873fa"
+            },
             "dist": {
-                "type": "path",
-                "url": "../sftp",
-                "reference": "a3510ef68dcb2b849b865ef383e5de9784ad5eab"
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fsftp/repository/archive.zip?sha=dedcc9f89572393035bdca3ba334b418210873fa",
+                "reference": "dedcc9f89572393035bdca3ba334b418210873fa",
+                "shasum": ""
             },
             "require": {
                 "ext-ssh2": "*",
@@ -21,17 +27,14 @@
             "require-dev": {
                 "phpunit/phpunit": "~9"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "rspaeth\\": "./src/"
+                    "MVQN\\": "./src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "rspaeth\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -42,9 +45,10 @@
                 }
             ],
             "description": "A Simple File Transfer Protocol (SFTP) wrapper.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/14659809/issues"
+            },
+            "time": "2021-02-13T02:51:18+00:00"
         }
     ],
     "packages-dev": [
@@ -811,6 +815,59 @@
                 "source": "https://github.com/thephpleague/container/tree/2.x"
             },
             "time": "2017-05-10T09:20:27+00:00"
+        },
+        {
+            "name": "mvqn/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/mvqn/common.git",
+                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fcommon/repository/archive.zip?sha=82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
+                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "~7.3"
+            },
+            "require-dev": {
+                "composer/composer": "^1.9",
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "ext-mbstring": "*",
+                "ext-simplexml": "*",
+                "phpunit/phpunit": "~9",
+                "twig/twig": "^2.11"
+            },
+            "default-branch": true,
+            "bin": [
+                "./bin/phpdoc-md"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "rspaeth\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan Spaeth",
+                    "email": "rspaeth@mvqn.net"
+                }
+            ],
+            "description": "A library of common classes and functions, specifically designed for use in my own projects!",
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/14659799/issues"
+            },
+            "time": "2021-02-13T02:24:35+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1785,60 +1842,6 @@
                 "source": "https://github.com/php-fig/log/tree/1.1.3"
             },
             "time": "2020-03-23T09:12:05+00:00"
-        },
-        {
-            "name": "rspaeth/common",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "../common",
-                "reference": "18391593f4f0461a0b9410882fabcdbe35a24828"
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "~7.3"
-            },
-            "require-dev": {
-                "composer/composer": "^1.9",
-                "ext-dom": "*",
-                "ext-libxml": "*",
-                "ext-mbstring": "*",
-                "ext-simplexml": "*",
-                "phpunit/phpunit": "~9",
-                "twig/twig": "^2.11"
-            },
-            "bin": [
-                "./bin/phpdoc-md"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "rspaeth\\": "./src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "rspaeth\\": "./tests/"
-                }
-            },
-            "scripts": {
-                "document": [
-                    "\\rspaeth\\Common\\Documentation::generate"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Spaeth",
-                    "email": "rspaeth@mvqn.net"
-                }
-            ],
-            "description": "A library of common classes and functions, specifically designed for use in my own projects!",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "sebastian/cli-parser",
@@ -3816,11 +3819,14 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "mvqn/sftp": 20,
+        "mvqn/common": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2",
+        "php": "~7.3",
         "ext-json": "*",
         "ext-zip": "*"
     },

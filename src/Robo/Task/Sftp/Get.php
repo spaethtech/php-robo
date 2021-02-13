@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Robo\Task\Sftp;
+namespace MVQN\Robo\Task\Sftp;
 
-use rspaeth\Common\Paths;
-use rspaeth\Robo\Task\Sftp\Exceptions\OptionMissingException;
+use MVQN\Common\Paths;
+use MVQN\Robo\Task\Sftp\Exceptions\OptionMissingException;
 use Robo\Contract\TaskInterface;
 use Robo\Result;
 
-use rspaeth\SFTP\SftpClient;
-use rspaeth\SFTP\Exceptions\AuthenticationException;
-use rspaeth\SFTP\Exceptions\InitializationException;
-use rspaeth\SFTP\Exceptions\LocalStreamException;
-use rspaeth\SFTP\Exceptions\MissingExtensionException;
-use rspaeth\SFTP\Exceptions\RemoteConnectionException;
-use rspaeth\SFTP\Exceptions\RemoteStreamException;
+use MVQN\SFTP\SftpClient;
+use MVQN\SFTP\Exceptions\AuthenticationException;
+use MVQN\SFTP\Exceptions\InitializationException;
+use MVQN\SFTP\Exceptions\LocalStreamException;
+use MVQN\SFTP\Exceptions\MissingExtensionException;
+use MVQN\SFTP\Exceptions\RemoteConnectionException;
+use MVQN\SFTP\Exceptions\RemoteStreamException;
 
 /**
  * Exposes some SFTP functionality.

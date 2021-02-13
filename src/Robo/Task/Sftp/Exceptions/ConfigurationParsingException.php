@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Robo\Task\Sftp\Exceptions;
+namespace MVQN\Robo\Task\Sftp\Exceptions;
 
 final class ConfigurationParsingException extends \Exception
 {

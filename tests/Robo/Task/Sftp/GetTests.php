@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Robo\Task\Sftp;
+namespace MVQN\Robo\Task\Sftp;
 
 use PHPUnit\Framework\TestCase;
 
