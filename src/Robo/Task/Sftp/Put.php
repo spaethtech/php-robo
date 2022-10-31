@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Robo\Task\Sftp;
+namespace SpaethTech\Robo\Task\Sftp;
 
-use MVQN\Common\Paths;
-use MVQN\Robo\Task\Sftp\Exceptions\OptionMissingException;
+use SpaethTech\Common\Paths;
+use SpaethTech\Robo\Task\Sftp\Exceptions\OptionMissingException;
 use Robo\Contract\TaskInterface;
 use Robo\Result;
 
-use MVQN\SFTP\SftpClient;
-use MVQN\SFTP\Exceptions\AuthenticationException;
-use MVQN\SFTP\Exceptions\InitializationException;
-use MVQN\SFTP\Exceptions\LocalStreamException;
-use MVQN\SFTP\Exceptions\MissingExtensionException;
-use MVQN\SFTP\Exceptions\RemoteConnectionException;
-use MVQN\SFTP\Exceptions\RemoteStreamException;
+use SpaethTech\SFTP\SftpClient;
+use SpaethTech\SFTP\Exceptions\AuthenticationException;
+use SpaethTech\SFTP\Exceptions\InitializationException;
+use SpaethTech\SFTP\Exceptions\LocalStreamException;
+use SpaethTech\SFTP\Exceptions\MissingExtensionException;
+use SpaethTech\SFTP\Exceptions\RemoteConnectionException;
+use SpaethTech\SFTP\Exceptions\RemoteStreamException;
 
 /**
  * Exposes some SFTP functionality.
@@ -44,7 +44,7 @@ use MVQN\SFTP\Exceptions\RemoteStreamException;
  * ?>
  * ```
  *
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @final
  */
 final class Put extends Base implements TaskInterface

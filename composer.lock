@@ -7,11 +7,11 @@
     "content-hash": "d508e0be85fdd950e4769868d9fe0aec",
     "packages": [
         {
-            "name": "mvqn/sftp",
+            "name": "spaethtech/sftp",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/mvqn/sftp.git",
+                "url": "https://gitlab.com/spaethtech/sftp.git",
                 "reference": "dedcc9f89572393035bdca3ba334b418210873fa"
             },
             "dist": {
@@ -31,7 +31,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "MVQN\\": "./src/"
+                    "SpaethTech\\": "./src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -41,7 +41,7 @@
             "authors": [
                 {
                     "name": "Ryan Spaeth",
-                    "email": "rspaeth@mvqn.net"
+                    "email": "rspaeth@spaethtech.com"
                 }
             ],
             "description": "A Simple File Transfer Protocol (SFTP) wrapper.",
@@ -817,11 +817,11 @@
             "time": "2017-05-10T09:20:27+00:00"
         },
         {
-            "name": "mvqn/common",
+            "name": "spaethtech/common",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/mvqn/common.git",
+                "url": "https://gitlab.com/spaethtech/common.git",
                 "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98"
             },
             "dist": {
@@ -860,7 +860,7 @@
             "authors": [
                 {
                     "name": "Ryan Spaeth",
-                    "email": "rspaeth@mvqn.net"
+                    "email": "rspaeth@spaethtech.com"
                 }
             ],
             "description": "A library of common classes and functions, specifically designed for use in my own projects!",
@@ -3820,8 +3820,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "mvqn/sftp": 20,
-        "mvqn/common": 20
+        "spaethtech/sftp": 20,
+        "spaethtech/common": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
