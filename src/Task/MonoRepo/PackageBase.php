@@ -134,6 +134,7 @@ abstract class PackageBase extends BaseTask
         if(!file_exists($path))
         {
             $this->executeCommand("git submodule add --name $name $url $path");
+            $this->executeCommand("git add .gitmodules $path");
         }
 
     }
