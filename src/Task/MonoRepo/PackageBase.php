@@ -133,8 +133,10 @@ abstract class PackageBase extends BaseTask
 
         if(!file_exists($path))
         {
+            $this->executeCommand("git reset");
             $this->executeCommand("git submodule add --name $name $url $path");
             $this->executeCommand("git add .gitmodules $path");
+            $this->executeCommand("git commit -m \"Added package $name to mono repo\"");
         }
 
     }
@@ -146,6 +148,8 @@ abstract class PackageBase extends BaseTask
 
         if(file_exists($path))
         {
+            $this->executeCommand("git reset");
+
             # Remove the submodule entry from .git/config
             $this->executeCommand("git submodule deinit -f $path");
 
@@ -154,6 +158,9 @@ abstract class PackageBase extends BaseTask
 
             # Remove the entry in .gitmodules and remove the submodule directory
             $this->executeCommand("git rm -rf $path");
+
+            //$this->executeCommand("git add .gitmodules $path");
+            $this->executeCommand("git commit -m \"Removed package $name from mono repo\"");
         }
 
     }
