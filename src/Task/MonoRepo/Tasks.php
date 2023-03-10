@@ -9,26 +9,42 @@ namespace SpaethTech\Robo\Task\MonoRepo;
 
 use Robo\Collection\CollectionBuilder;
 
+/**
+ * Trait Tasks
+ *
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022 Spaeth Technologies Inc.
+ */
 trait Tasks
 {
     /**
-     * @param string $repo The package/repository name
+     * @param string $name The library name
      *
-     * @return PackageAdd|CollectionBuilder
+     * @return LibraryAdd|CollectionBuilder
      */
-    protected function taskPackageAdd(string $repo)
+    protected function taskLibraryAdd(string $name)
     {
-        return $this->task(PackageAdd::class, $repo);
+        return $this->task(LibraryAdd::class, $name);
     }
 
     /**
-     * @param string $repo The package/repository name
+     * @param string $name The library name
      *
-     * @return PackageRemove|CollectionBuilder
+     * @return LibraryDel|CollectionBuilder
      */
-    protected function taskPackageRemove(string $repo)
+    protected function taskLibraryDel(string $name)
     {
-        return $this->task(PackageRemove::class, $repo);
+        return $this->task(LibraryDel::class, $name);
+    }
+
+    /**
+     * @param string $name The library name
+     *
+     * @return LibraryNew|CollectionBuilder
+     */
+    protected function taskLibraryNew(string $name)
+    {
+        return $this->task(LibraryNew::class, $name);
     }
 
 }

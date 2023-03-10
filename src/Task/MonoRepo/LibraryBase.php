@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace SpaethTech\Robo\Task\MonoRepo;
 
+use Dotenv\Dotenv;
 use Robo\Common\ExecOneCommand;
+use Robo\Result;
 use Robo\Task\BaseTask;
 
 /**
- * Class PackageBase
+ * Class LibraryBase
  *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @copyright 2022 Spaeth Technologies Inc.
  */
-abstract class PackageBase extends BaseTask
+abstract class LibraryBase extends BaseTask
 {
     use ExecOneCommand;
 
@@ -32,6 +34,8 @@ abstract class PackageBase extends BaseTask
     /** @var bool Required to delete (or replace) an existing package */
     protected bool $force = FALSE;
 
+    protected Dotenv $dotenv;
+
     /**
      * Default constructor
      *
@@ -40,6 +44,10 @@ abstract class PackageBase extends BaseTask
     public function __construct(string $repo)
     {
         $this->repo = $repo;
+
+        // Load any .env at the root directory
+        $this->dotenv = Dotenv::createImmutable(PROJECT_DIR);
+        $this->dotenv->load();
     }
 
     /**
@@ -165,5 +173,46 @@ abstract class PackageBase extends BaseTask
 
     }
 
+    protected function createRepo()
+    {
+        $path = $this->getPath();
+        $name = $this->getName();
+        $url  = $this->getFullUrl();
+
+        if(!file_exists($path))
+        {
+            if(!$this->findExecutable("gh"))
+            {
+                $this->printTaskError("Could not locate the GitHub CLI executable");
+                $this->printTaskInfo("The GitHub CLI can be installed from: https://cli.github.com/");
+                exit();
+            }
+
+            // Simulate the built-in executeCommand output...
+            $check = "git ls-remote $url HEAD >/dev/null 2>&1";
+            $this->printTaskInfo("Running <fg=green>$check</>");
+            $start = microtime(TRUE);
+            $exec = exec($check, $output, $exit);
+            $duration = round(microtime(TRUE) - $start, 3);
+
+            if ($exec !== FALSE && $exit === 0)
+            {
+                $this->printTaskError("The specified repository already exists!");
+                $this->printTaskInfo("To add this existing repo, use: <options=bold>robo lib:add $this->repo</>");
+                $this->printTaskSuccess("Done in <fg=yellow>${duration}s</>");
+                exit();
+            }
+            else
+            {
+                $this->printTaskSuccess("Done in <fg=yellow>${duration}s</>");
+            }
+
+
+
+
+
+        }
+
+    }
 
 }

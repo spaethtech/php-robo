@@ -7,15 +7,15 @@ namespace SpaethTech\Robo\Task\MonoRepo;
 use Robo\Result;
 
 /**
- * Class PackageRemove
+ * Class LibraryNew
  *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @copyright 2022 Spaeth Technologies Inc.
  */
-class PackageRemove extends PackageBase
+class LibraryNew extends LibraryBase
 {
     /**
-     * @inheritDoc
+     * @return Result
      */
     public function run(): Result
     {
@@ -29,11 +29,15 @@ class PackageRemove extends PackageBase
             {
                 return Result::error($this,
                     "Found an existing package at <bg=red;options=bold>".$this->getPath()."</>, ".
-                    "use <bg=red;options=bold>--force</> to force removal");
+                    "use <bg=red;options=bold>--force</> to force replacement");
             }
         }
 
+        //$this->addSubmodule();
+        $this->createRepo();
+
         return Result::success($this);
     }
+
 
 }

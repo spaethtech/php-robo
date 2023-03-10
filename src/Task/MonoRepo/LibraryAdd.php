@@ -7,12 +7,12 @@ namespace SpaethTech\Robo\Task\MonoRepo;
 use Robo\Result;
 
 /**
- * Class PackageAdd
+ * Class LibraryAdd
  *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @copyright 2022 Spaeth Technologies Inc.
  */
-class PackageAdd extends PackageBase
+class LibraryAdd extends LibraryBase
 {
     /**
      * @return Result
