@@ -144,7 +144,7 @@ abstract class LibraryBase extends BaseTask
             $this->executeCommand("git reset");
             $this->executeCommand("git submodule add --name $name $url $path");
             $this->executeCommand("git add .gitmodules $path");
-            $this->executeCommand("git commit -m \"Added package $name to mono repo\"");
+            $this->executeCommand("git commit -m \"Added $name submodule\"");
         }
 
     }
@@ -168,7 +168,7 @@ abstract class LibraryBase extends BaseTask
             $this->executeCommand("git rm -rf $path");
 
             //$this->executeCommand("git add .gitmodules $path");
-            $this->executeCommand("git commit -m \"Removed package $name from mono repo\"");
+            $this->executeCommand("git commit -m \"Removed $name submodule\"");
         }
 
     }
