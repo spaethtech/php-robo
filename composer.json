@@ -1,5 +1,5 @@
 {
-    "name": "spaethtech/robo",
+    "name": "spaethtech/php-robo",
     "description": "A collection of Robo Tasks for our projects.",
     "type": "robo-tasks",
     "license": "MIT",
